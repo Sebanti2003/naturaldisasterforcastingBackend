@@ -4,22 +4,15 @@ import { configDotenv } from "dotenv";
 configDotenv();
 const app = express();
 
-
-
-
-const port =process.env.PORT;
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-
-
 app.get("/", (req, res) => {
   res.status(200).json({
-      message: "Your server is running perfectly!!!"
+    message: "Your server is running perfectly!!!",
   });
 });
 
