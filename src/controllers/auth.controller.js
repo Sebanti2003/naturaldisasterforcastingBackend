@@ -121,8 +121,6 @@ export const login = async (req, res, next) => {
       { id: user._id, email: user.email, username: user.username },
       process.env.JWT_SECRET_KEY
     );
-
-    // Set cookie for 1 minute
     res.cookie("cookietoken", token, {
       maxAge: 60 * 60 * 1000,
       httpOnly: true,
@@ -189,6 +187,92 @@ export const veerificationtokencheck = async (req, res, next) => {
     console.log(error);
     return res.status(500).json({
       message: "Internal Server Error in veerificationtokencheck",
+      success: false,
+    });
+  }
+};
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("cookietoken", {
+      httpOnly: true,
+      secure: true,
+    }); // Clears the cookie
+    return res.status(200).json({
+      message: "Logout successful",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error in logout",
+      success: false,
+    });
+  }
+};
+export const forgotpasswordemailsent = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    const result = await sendEmail({
+      email,
+      emailType: "RESETPASSWORD",
+      userid: user._id,
+    });
+    return res.status(200).json({
+      message: "Email sent successfully for password reset",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error in forgotpassword",
+      success: false,
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { userid } = req.params;
+    const { token } = req.query;
+    const { newPassword } = req.body;
+    const encoded = encodeURIComponent(token);
+    // Find user and validate token
+    const user = await User.findOne({
+      _id: userid,
+      forgotPasswordToken: encoded,
+      forgotPasswordTokenExpires: { $gt: Date.now() }, // Ensure token is not expired
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired token",
+        success: false,
+      });
+    }
+    const hashsalt = await bcrypt.genSaltSync(10);
+    const hashedPassword = await bcrypt.hash(newPassword, hashsalt);
+    user.password = hashedPassword;
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordTokenExpires = undefined;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Password reset successfully",
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error in resetPassword",
       success: false,
     });
   }

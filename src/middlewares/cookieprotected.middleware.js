@@ -5,7 +5,7 @@ export const cookieprotected = (req, res, next) => {
     const token = req.cookies.cookietoken;
     if (!token) {
       return res.status(403).json({
-        message: "Token is missing!",
+        message: "Token is missing! OR Invalid Token!",
         success: false,
       });
     }
