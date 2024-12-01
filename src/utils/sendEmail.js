@@ -38,11 +38,11 @@
 //     }
 //     const user = await User.findById(userid);
 //     const transporter = nodemailer.createTransport({
-//       host: process.env.MAILTRAP_HOST,
-//       port: process.env.MAILTRAP_PORT,
+//       host: process.env.BREVO_HOST,
+//       port: process.env.BREVO_PORT,
 //       auth: {
-//         user: process.env.MAILTRAP_USER,
-//         pass: process.env.MAILTRAP_PASSWORD,
+//         user: process.env.BREVO_USER,
+//         pass: process.env.BREVO_PASSWORD,
 //       },
 //     });
 //     const resetpasswordmessage = `Hello, \n\nYou are receiving this email because you
@@ -213,11 +213,11 @@ export const sendEmail = async ({ email, emailType, userid }) => {
 
     // Configure Nodemailer transporter
     const transporter = nodemailer.createTransport({
-      host: process.env.MAILTRAP_HOST,
-      port: process.env.MAILTRAP_PORT,
+      host: process.env.BREVO_HOST,
+      port: process.env.BREVO_PORT,
       auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASSWORD,
+        user: process.env.BREVO_USER,
+        pass: process.env.BREVO_PASSWORD,
       },
     });
 
@@ -279,6 +279,8 @@ export const sendEmail = async ({ email, emailType, userid }) => {
 
     // Send email
     const info = await transporter.sendMail(mailOptions);
+    console.log(info);
+
     return info;
   } catch (error) {
     console.log(error);
