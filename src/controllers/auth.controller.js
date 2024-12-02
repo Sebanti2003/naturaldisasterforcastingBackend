@@ -39,9 +39,7 @@ export const signup = async (req, res, next) => {
         message: "Password should be between 8 to 20 characters long",
       });
     }
-    const user = await User.findOne({
-      $or: [{ username: username }, { email: email }],
-    });
+    const user = await User.findOne({ email: email });
     if (user) {
       return res.status(400).json({
         message: "User already exists",
