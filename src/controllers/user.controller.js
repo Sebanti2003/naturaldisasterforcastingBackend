@@ -16,3 +16,5 @@ export const getuserinfo = async (req, res) => {
     return res.status(500).json({ message: error.message, success: false });
   }
 };
+
+

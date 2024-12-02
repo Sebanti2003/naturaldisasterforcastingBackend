@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 configDotenv();
 export const signup = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password,role="user" } = req.body;
     if (!username) {
       return res.status(400).json({
         message: "username is required",
@@ -55,6 +55,7 @@ export const signup = async (req, res, next) => {
       username: username,
       email: email,
       password: hashedPassword,
+      role: role
     });
     const result = await sendEmail({
       email,
