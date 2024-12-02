@@ -5,14 +5,13 @@ export const cookieprotected = (req, res, next) => {
     const token = req.cookies.cookietoken;
     if (!token) {
       return res.status(403).json({
-        message: "Token is missing! OR Invalid Token!",
+        message: "Token is missing! OR Invalid Token! Login Again",
         success: false,
       });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     // console.log(decoded);
-
     req.user = decoded;
 
     next();
