@@ -8,9 +8,15 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { adminonly } from "./middlewares/adminonly.middleware.js";
 import { cookieprotected } from "./middlewares/cookieprotected.middleware.js";
+
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());

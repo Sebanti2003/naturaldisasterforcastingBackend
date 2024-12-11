@@ -4,10 +4,11 @@ import { validatetheformatepasssword } from "../utils/passwordformatchecking.js"
 import bcrypt from "bcryptjs";
 import { sendEmail } from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
+// import { SassArgumentList } from "sass";
 configDotenv();
 export const signup = async (req, res, next) => {
   try {
-    const { username, email, password,role="user" } = req.body;
+    const { username, email, password, role = "user" } = req.body;
     if (!username) {
       return res.status(400).json({
         message: "username is required",
@@ -53,7 +54,7 @@ export const signup = async (req, res, next) => {
       username: username,
       email: email,
       password: hashedPassword,
-      role: role
+      role: role,
     });
     const result = await sendEmail({
       email,
@@ -123,6 +124,8 @@ export const login = async (req, res, next) => {
     res.cookie("cookietoken", token, {
       maxAge: 60 * 60 * 1000,
       httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
     });
 
     return res.status(200).json({

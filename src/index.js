@@ -1,14 +1,13 @@
 import { configDotenv } from "dotenv";
 import { connectDB } from "./db/index.js";
-
+// import express from "express";
+// import openai from "openai";
 //dotenv configuration
+import app from './app.js'
 configDotenv();
 const port = process.env.PORT;
 //database connection
 connectDB();
-
-//server connection
-import app from "./app.js";
 
 //localport connection
 app.listen(3000, () => {
