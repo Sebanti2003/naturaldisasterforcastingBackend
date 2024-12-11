@@ -5,6 +5,6 @@ import { cookieprotected } from "../middlewares/cookieprotected.middleware.js";
 
 const router = express.Router();
 
-router.route("/me").get(getuserinfo);
+router.route("/me").get(cookieprotected,getuserinfo);
 
 export default router;
