@@ -12,12 +12,24 @@ import { cookieprotected } from "./middlewares/cookieprotected.middleware.js";
 
 const app = express();
 
+const allowedOrigins = [
+  "https://forecast-frontend-iwid.vercel.app",
+  "http://localhost:3000", // for local development
+];
+
 app.use(
   cors({
-    origin: "https://forecast-frontend-iwid.vercel.app/",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(express.json());
