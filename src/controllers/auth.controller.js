@@ -126,6 +126,7 @@ export const login = async (req, res, next) => {
       httpOnly: true,
       secure: true,
       sameSite: "None",
+      partitioned: true,
     });
 
     return res.status(200).json({
