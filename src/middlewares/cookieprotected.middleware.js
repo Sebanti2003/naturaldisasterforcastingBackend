@@ -1,23 +1,22 @@
-import jwt from "jsonwebtoken";
-
-export const cookieprotected = (req, res, next) => {
+export const sessionProtected = (req, res, next) => {
   try {
-    const token = req.cookies.cookietoken;
-    if (!token) {
+    // Check if session user exists
+    if (!req.session.user) {
       return res.status(403).json({
-        message: "Token is missing! OR Invalid Token! Login Again",
+        message: "Session is missing! Please log in again.",
         success: false,
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    // console.log(decoded);
-    req.user = decoded;
+    // Pass the user to the next middleware/handler
+    console.log(req.session.user);
+    
+    req.user = req.session.user;
 
     next();
   } catch (error) {
     return res.status(500).json({
-      message: "Token verification failed",
+      message: "Session verification failed",
       success: false,
       error: error.message,
     });

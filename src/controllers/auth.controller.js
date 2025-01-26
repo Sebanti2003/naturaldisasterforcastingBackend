@@ -116,22 +116,26 @@ export const login = async (req, res, next) => {
       });
     }
 
-    // Create JWT token
-    const token = jwt.sign(
-      { id: user._id, email: user.email, username: user.username },
-      process.env.JWT_SECRET_KEY
-    );
-    res.cookie("cookietoken", token, {
-      maxAge: 60 * 60 * 1000,
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      partitioned: true,
-    });
+    {
+      // Create JWT token
+      // const token = jwt.sign(
+      //   { id: user._id, email: user.email, username: user.username },
+      //   process.env.JWT_SECRET_KEY
+      // );
+      // res.cookie("cookietoken", token, {
+      //   maxAge: 60 * 60 * 1000,
+      //   httpOnly: true,
+      //   secure: true,
+      //   sameSite: "None",
+      //   partitioned: true,
+      // });
+    }
+    req.session.user = user;
 
     return res.status(200).json({
       message: "Login successful",
       success: true,
+      ses: req.session.user,
       user,
     });
   } catch (error) {
@@ -196,13 +200,10 @@ export const veerificationtokencheck = async (req, res, next) => {
 };
 export const logout = async (req, res, next) => {
   try {
-    res.clearCookie("cookietoken", {
-      httpOnly: true,
-      secure: true,
-    }); // Clears the cookie
-    return res.status(200).json({
-      message: "Logout successful",
-      success: true,
+    req.session.destroy((err) => {
+      if (err) return res.status(500).json({ error: "Error logging out" });
+      res.clearCookie("connect.sid");
+      res.json({ message: "Logout successful" });
     });
   } catch (error) {
     console.log(error);

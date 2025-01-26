@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 export const getuserinfo = async (req, res) => {
   try {
     const user = req.user;
-    const userinfo = await User.findById(user.id).select("username email _id isVerified role");
+    const userinfo = await User.findById(user._id).select("username email _id isVerified role");
     if (!userinfo) {
       return res
         .status(404)
