@@ -240,7 +240,7 @@ export const sendEmail = async ({ email, emailType, userid }) => {
       <p>You are receiving this email to verify your email address.</p>
       <p>Please click the link below or paste it into your browser to verify your email:</p>
       <p>
-        <a href="${process.env.URL}/api/v1/user/auth/verify-email/${userid}?token=${user.verificationToken}">
+        <a href="${process.env.URL3}/api/v1/user/auth/verify-email/${userid}?token=${user.verificationToken}">
           Verify Email
         </a>
       </p>
