@@ -39,6 +39,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
 app.use(
   session({
     secret: "a57cb2f7c4a1ef3a8a3c6a5bf213d998812de8fc7bb47da8b7347a92f9ec48d9",

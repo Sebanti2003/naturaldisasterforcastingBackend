@@ -26,6 +26,12 @@ const userschema = new mongoose.Schema(
     verificationTokenExpires: {
       type: Date,
     },
+    sessionToken: {
+      type: String,
+    },
+    sessionTokenExpires: {
+      type: Date,
+    },
     isVerified: {
       type: Boolean,
       default: false,
